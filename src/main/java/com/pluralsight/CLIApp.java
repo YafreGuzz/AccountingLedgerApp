@@ -19,62 +19,62 @@ public class CLIApp
 
     public static void homeScreen()
     {
-        System.out.println("Welcome to our Financial Transactions log: \n");
-        System.out.println("What would you like to do? ");
+        System.out.println("Welcome to our Account Ledger Application log: \n");
+        System.out.println("What would you like to do? \n");
         System.out.println("---------------------------");
-        System.out.println("  1. Add Deposit");
-        System.out.println("  2. Make Payment(Debit)");
-        System.out.println("  3. Ledger");
-        System.out.println("  4. Exit");
-        System.out.print("Choice: ");
+        System.out.println("  [D] Add Deposit");
+        System.out.println("  [P] Make Payment(Debit)");
+        System.out.println("  [L] Ledger");
+        System.out.println("  [X] Exit \n");
+        System.out.print("Enter Choice: ");
 
-        int choice = scanner.nextInt();
+        String choice = scanner.nextLine();
 
         getInventory();
 
         switch (choice)
         {
-            case 1:
+            case "D", "d":
                 addDeposit();
                 break;
-            case 2:
+            case "P", "p":
                 addDebitCard();
                 break;
-            case 3:
+            case "L", "l":
                 Ledger();
                 break;
-            case 4:
+            case "X", "x":
                 System.exit(0);
         }
     }
     public static void  Ledger()
     {
-        System.out.println("\n Welcome to the Ledger");
+        System.out.println("\n Welcome to the Ledger \n");
         System.out.println("-------------------------");
-        System.out.println("  1. All");
-        System.out.println("  2. Deposits");
-        System.out.println("  3. Payments");
-        System.out.println("  4. Reports");
-        System.out.println("  5. Home");
-        System.out.print("choose: ");
+        System.out.println("  [A] All");
+        System.out.println("  [D] Deposits");
+        System.out.println("  [P] Payments");
+        System.out.println("  [R] Reports");
+        System.out.println("  [H] Home \n");
+        System.out.print("Enter Choice: ");
 
-        int choice = scanner.nextInt();
+        String choice = scanner.nextLine();
 
         switch (choice)
         {
-            case 1:
+            case "A", "a":
                 displayAllEntries();
                 break;
-            case 2:
+            case "D", "d":
                 deposits();
                 break;
-            case 3:
+            case "P", "p":
                 payments();
                 break;
-            case 4:
+            case "R", "r":
                 reports();
                 break;
-            case 5:
+            case "H", "h":
                 homeScreen();
                 break;
         }
@@ -83,15 +83,15 @@ public class CLIApp
 
     public static void reports()
     {
-        System.out.println("Custom Search: ");
+        System.out.println("Custom Search: \n");
         System.out.println("-------------------");
         System.out.println("  1. Month To Date");
         System.out.println("  2. Previous Month");
         System.out.println("  3. Year To Date");
         System.out.println("  4. Previous Year");
         System.out.println("  5. Search by Vendor");
-        System.out.println("  0. Back");
-        System.out.print("Choose: ");
+        System.out.println("  0. Back \n");
+        System.out.print("Enter Choice: ");
 
         int choice = scanner.nextInt();
 
@@ -127,15 +127,17 @@ public class CLIApp
             BufferedWriter bufWriter = new BufferedWriter(fileWriter);
             String input;
 
-            scanner.nextLine();
-            System.out.println("Make A Deposit ");
-            System.out.println("----------------");
-            System.out.print("Description: ");
+            System.out.println("\nMake A Deposit ");
+            System.out.println("---------------- \n");
+            System.out.print("Enter a description: ");
             String description = scanner.nextLine();
-            System.out.print("Vendor: ");
+            System.out.print("Enter Vendor: ");
             String vendor = scanner.nextLine();
-            System.out.print("Amount: ");
+            System.out.print("Enter Amount: ");
             double amount = scanner.nextDouble();
+
+            System.out.println("\n --------------- \n");
+            System.out.println("Payment added successfully!");
 
             inventory.add(new Log(null, null, description, vendor, amount));
 
@@ -165,13 +167,12 @@ public class CLIApp
             BufferedWriter bufWriter = new BufferedWriter(fileWriter);
 
             System.out.println("Enter your Credit Card information: ");
-            System.out.println("-------------------------------------");
+            System.out.println("------------------------------------- \n");
             System.out.print("Enter the card holder name: ");
-            scanner.nextLine();
             String name = scanner.nextLine();
             System.out.print("Credit Card Number(ex: 1234 5678 9876 5432): ");
             String creditCard = scanner.nextLine();
-            System.out.print("Enter expiration date: ");
+            System.out.print("Enter Expiration Date: ");
             String expireDate = scanner.nextLine();
             System.out.print("Enter CVC(Three digit number): ");
             int CVCInput = scanner.nextInt();
@@ -290,7 +291,10 @@ public class CLIApp
         for(Log i : inventory)
         {
             LocalDate time = LocalDate.parse(i.getDate());
-            if(time.isBefore(previousMonth))
+            int month = time.getMonthValue();
+            int datemonth = previousMonth.getMonthValue();
+
+            if(month == datemonth)
             {
                 System.out.println("-----------------------------");
                 System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
@@ -340,8 +344,6 @@ public class CLIApp
 
     public static void searchByVendor()
     {
-        scanner.nextLine();
-
         System.out.println("Who's the Vendor? ");
         System.out.print("Answer: ");
         String name = scanner.nextLine();
@@ -395,7 +397,6 @@ public class CLIApp
 
     public static void backToLedger()
     {
-        scanner.nextLine();
         System.out.println("Go Back to Ledger?: yes/no");
         String choice = scanner.nextLine();
 
@@ -403,8 +404,8 @@ public class CLIApp
         {
             Ledger();
         }
-        else if (choice.equalsIgnoreCase("no")) {
+        else
             System.exit(0);
-        }
+        scanner.nextLine();
     }
 }
