@@ -359,4 +359,52 @@ public class CLIApp
 
     }
 
+
+    public static void  backToReports()
+    {
+        scanner.nextLine();
+        System.out.println("Go back to Reports? ");
+        System.out.print("Answer: ");
+
+        String choice = scanner.nextLine();
+
+        if (choice.equalsIgnoreCase("yes"))
+        {
+            reports();
+        }
+        else
+            System.exit(0);
+    }
+
+
+    public static void backToHomeScreen()
+    {
+        scanner.nextLine();
+        System.out.println("Go Back to Home Screen?: yes/no");
+        String choice = scanner.nextLine();
+
+        if(choice.equalsIgnoreCase("yes"))
+        {
+            homeScreen();
+        }
+        else if (choice.equalsIgnoreCase("no")) {
+            System.exit(0);
+        }
+    }
+
+
+    public static void backToLedger()
+    {
+        scanner.nextLine();
+        System.out.println("Go Back to Ledger?: yes/no");
+        String choice = scanner.nextLine();
+
+        if(choice.equalsIgnoreCase("yes"))
+        {
+            Ledger();
+        }
+        else if (choice.equalsIgnoreCase("no")) {
+            System.exit(0);
+        }
+    }
 }
