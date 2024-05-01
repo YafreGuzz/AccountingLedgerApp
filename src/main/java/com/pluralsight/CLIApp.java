@@ -19,9 +19,9 @@ public class CLIApp
 
     public static void homeScreen()
     {
-        System.out.println("Welcome to our Account Ledger Application log: \n");
-        System.out.println("What would you like to do? \n");
-        System.out.println("---------------------------");
+        System.out.println("\nWelcome to our Account Ledger Application log:");
+        System.out.println("What would you like to do? ");
+        System.out.println("---------------------------\n");
         System.out.println("  [D] Add Deposit");
         System.out.println("  [P] Make Payment(Debit)");
         System.out.println("  [L] Ledger");
@@ -49,8 +49,8 @@ public class CLIApp
     }
     public static void  Ledger()
     {
-        System.out.println("\n Welcome to the Ledger \n");
-        System.out.println("-------------------------");
+        System.out.println("\n Welcome to the Ledger");
+        System.out.println("-------------------------\n");
         System.out.println("  [A] All");
         System.out.println("  [D] Deposits");
         System.out.println("  [P] Payments");
@@ -83,8 +83,8 @@ public class CLIApp
 
     public static void reports()
     {
-        System.out.println("Custom Search: \n");
-        System.out.println("-------------------");
+        System.out.println("\n Custom Search: ");
+        System.out.println("-------------------\n");
         System.out.println("  1. Month To Date");
         System.out.println("  2. Previous Month");
         System.out.println("  3. Year To Date");
@@ -113,7 +113,7 @@ public class CLIApp
                 searchByVendor();
                 break;
             case 0:
-                Ledger();
+                backToLedger();
                 break;
         }
     }
@@ -216,16 +216,17 @@ public class CLIApp
             BufferedReader bufReader = new BufferedReader(fileReader);
             String readerInput;
 
-            while ((readerInput = bufReader.readLine()) != null)
-            {
-                String[] barIndex = readerInput.split(Pattern.quote("|"));
-                String date = barIndex[0];
-                String time = barIndex[1];
-                String description = barIndex[2];
-                String vendor = barIndex[3];
-                double amount = Double.parseDouble(barIndex[4]);
+            if (inventory.isEmpty()) {
+                while ((readerInput = bufReader.readLine()) != null) {
+                    String[] barIndex = readerInput.split(Pattern.quote("|"));
+                    String date = barIndex[0];
+                    String time = barIndex[1];
+                    String description = barIndex[2];
+                    String vendor = barIndex[3];
+                    double amount = Double.parseDouble(barIndex[4]);
 
-                inventory.add(new Log(date, time, description, vendor, amount));
+                    inventory.add(new Log(date, time, description, vendor, amount));
+                }
             }
         }
         catch (IOException e)
@@ -404,8 +405,9 @@ public class CLIApp
         {
             Ledger();
         }
-        else
+        else {
             System.exit(0);
+        }
         scanner.nextLine();
     }
 }
