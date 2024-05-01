@@ -118,4 +118,42 @@ public class CLIApp
         }
     }
 
+    public static void addDeposit()
+    {
+
+        try
+        {
+            FileWriter fileWriter = new FileWriter("src/main/resources/transactions.csv", true);
+            BufferedWriter bufWriter = new BufferedWriter(fileWriter);
+            String input;
+
+            scanner.nextLine();
+            System.out.println("Make A Deposit ");
+            System.out.println("----------------");
+            System.out.print("Description: ");
+            String description = scanner.nextLine();
+            System.out.print("Vendor: ");
+            String vendor = scanner.nextLine();
+            System.out.print("Amount: ");
+            double amount = scanner.nextDouble();
+
+            inventory.add(new Log(null, null, description, vendor, amount));
+
+            LocalDateTime time = LocalDateTime.now();
+            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd|HH:mm:ss|");
+            String formattedDate = time.format(fmt);
+
+            input = String.format("\n" + formattedDate + description + "|" + vendor + "|" + amount);
+            bufWriter.write(input);
+
+            bufWriter.close();
+
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        backToHomeScreen();
+    }
 }
