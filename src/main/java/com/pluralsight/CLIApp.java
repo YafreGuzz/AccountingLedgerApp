@@ -263,4 +263,100 @@ public class CLIApp
         backToLedger();
     }
 
+
+    public static void monthToDate()
+    {
+        LocalDate date = LocalDate.now();
+
+        for(Log i : inventory)
+        {
+            LocalDate time = LocalDate.parse(i.getDate());
+            if(time.getMonth() == date.getMonth())
+            {
+                System.out.println("-----------------------------");
+                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
+                System.out.println("-----------------------------");
+            }
+        }
+        backToReports();
+    }
+
+
+    public static void previousMonth()
+    {
+        LocalDate date = LocalDate.now();
+        LocalDate previousMonth = date.minusMonths(1);
+
+        for(Log i : inventory)
+        {
+            LocalDate time = LocalDate.parse(i.getDate());
+            if(time.isBefore(previousMonth))
+            {
+                System.out.println("-----------------------------");
+                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
+                System.out.println("-----------------------------");
+            }
+        }
+        backToReports();
+    }
+
+
+    public static void yearToDate()
+    {
+        LocalDate date = LocalDate.now();
+
+        for(Log i : inventory)
+        {
+            LocalDate time = LocalDate.parse(i.getDate());
+            if(time.getYear() == date.getYear())
+            {
+                System.out.println("-----------------------------");
+                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
+                System.out.println("-----------------------------");
+            }
+        }
+        backToReports();
+    }
+
+
+    public static void previousYear()
+    {
+        LocalDate date = LocalDate.now();
+
+        for(Log i : inventory)
+        {
+            LocalDate time = LocalDate.parse(i.getDate());
+            int i1 = date.getYear() - 1;
+            if (i1 == time.getYear())
+            {
+                System.out.println("-----------------------------");
+                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
+                System.out.println("-----------------------------");
+            }
+        }
+        backToReports();
+    }
+
+
+    public static void searchByVendor()
+    {
+        scanner.nextLine();
+
+        System.out.println("Who's the Vendor? ");
+        System.out.print("Answer: ");
+        String name = scanner.nextLine();
+
+        for(Log i : inventory)
+        {
+            if(name.equalsIgnoreCase(i.getVendor()))
+            {
+                System.out.println("-----------------------------");
+                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
+                System.out.println("-----------------------------");
+            }
+        }
+        backToReports();
+
+    }
+
 }
