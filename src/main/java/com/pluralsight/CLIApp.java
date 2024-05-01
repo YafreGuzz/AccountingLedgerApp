@@ -47,4 +47,37 @@ public class CLIApp
                 System.exit(0);
         }
     }
+    public static void  Ledger()
+    {
+        System.out.println("\n Welcome to the Ledger");
+        System.out.println("-------------------------");
+        System.out.println("  1. All");
+        System.out.println("  2. Deposits");
+        System.out.println("  3. Payments");
+        System.out.println("  4. Reports");
+        System.out.println("  5. Home");
+        System.out.print("choose: ");
+
+        int choice = scanner.nextInt();
+
+        switch (choice)
+        {
+            case 1:
+                displayAllEntries();
+                break;
+            case 2:
+                deposits();
+                break;
+            case 3:
+                payments();
+                break;
+            case 4:
+                reports();
+                break;
+            case 5:
+                homeScreen();
+                break;
+        }
+
+    }
 }
