@@ -156,4 +156,41 @@ public class CLIApp
 
         backToHomeScreen();
     }
+
+    public static void addDebitCard()
+    {
+        try
+        {
+            FileWriter fileWriter = new FileWriter("src/main/resources/debitInformation.csv", true);
+            BufferedWriter bufWriter = new BufferedWriter(fileWriter);
+
+            System.out.println("Enter your Credit Card information: ");
+            System.out.println("-------------------------------------");
+            System.out.print("Enter the card holder name: ");
+            scanner.nextLine();
+            String name = scanner.nextLine();
+            System.out.print("Credit Card Number(ex: 1234 5678 9876 5432): ");
+            String creditCard = scanner.nextLine();
+            System.out.print("Enter expiration date: ");
+            String expireDate = scanner.nextLine();
+            System.out.print("Enter CVC(Three digit number): ");
+            int CVCInput = scanner.nextInt();
+
+            String CVC = Integer.toString(CVCInput);
+
+            bufWriter.write(name + "|");
+            bufWriter.write(creditCard + "|");
+            bufWriter.write(expireDate + "|");
+            bufWriter.write(CVC + "\n");
+
+            bufWriter.close();
+
+            backToHomeScreen();
+
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
 }
