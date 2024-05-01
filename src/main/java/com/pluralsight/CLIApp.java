@@ -193,4 +193,47 @@ public class CLIApp
             e.printStackTrace();
         }
     }
+
+
+    public static void displayAllEntries()
+    {
+        Collections.reverse(inventory);
+
+        for (Log object : inventory)
+        {
+            System.out.println(object);
+        }
+        backToLedger();
+    }
+
+
+    public static ArrayList<Log> getInventory()
+    {
+        try
+        {
+            FileReader fileReader = new FileReader("src/main/resources/transactions.csv");
+            BufferedReader bufReader = new BufferedReader(fileReader);
+            String readerInput;
+
+            while ((readerInput = bufReader.readLine()) != null)
+            {
+                String[] barIndex = readerInput.split(Pattern.quote("|"));
+                String date = barIndex[0];
+                String time = barIndex[1];
+                String description = barIndex[2];
+                String vendor = barIndex[3];
+                double amount = Double.parseDouble(barIndex[4]);
+
+                inventory.add(new Log(date, time, description, vendor, amount));
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return inventory;
+    }
+
+
+
 }
