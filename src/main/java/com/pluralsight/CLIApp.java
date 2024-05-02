@@ -19,102 +19,119 @@ public class CLIApp
 
     public static void homeScreen()
     {
-        System.out.println("\nWelcome to our Account Ledger Application log:");
-        System.out.println("What would you like to do? ");
-        System.out.println("---------------------------\n");
-        System.out.println("  [D] Add Deposit");
-        System.out.println("  [P] Make Payment(Debit)");
-        System.out.println("  [L] Ledger");
-        System.out.println("  [X] Exit \n");
-        System.out.print("Enter Choice: ");
-
-        String choice = scanner.nextLine();
-
-        getInventory();
-
-        switch (choice)
+        while(true)
         {
-            case "D", "d":
-                addDeposit();
-                break;
-            case "P", "p":
-                addDebitCard();
-                break;
-            case "L", "l":
-                Ledger();
-                break;
-            case "X", "x":
-                System.exit(0);
+            System.out.println("\nWelcome to our Account Ledger Application log:");
+            System.out.println("What would you like to do? ");
+            System.out.println("---------------------------\n");
+            System.out.println("  [D] Add Deposit");
+            System.out.println("  [P] Make Payment(Debit)");
+            System.out.println("  [L] Ledger");
+            System.out.println("  [X] Exit \n");
+            System.out.print("Enter Choice: ");
+
+            String choice = scanner.nextLine();
+
+            getInventory();
+
+            switch (choice) {
+                case "D", "d":
+                    addDeposit();
+                    break;
+                case "P", "p":
+                    addDebitCard();
+                    break;
+                case "L", "l":
+                    Ledger();
+                    break;
+                case "X", "x":
+                    System.exit(0);
+                default:
+                    System.out.println("This is not a valid response, \nplease try again.");
+            }
         }
     }
+
     public static void  Ledger()
     {
-        System.out.println("\n Welcome to the Ledger");
-        System.out.println("-------------------------\n");
-        System.out.println("  [A] All");
-        System.out.println("  [D] Deposits");
-        System.out.println("  [P] Payments");
-        System.out.println("  [R] Reports");
-        System.out.println("  [H] Home \n");
-        System.out.print("Enter Choice: ");
-
-        String choice = scanner.nextLine();
-
-        switch (choice)
+        while (true)
         {
-            case "A", "a":
-                displayAllEntries();
-                break;
-            case "D", "d":
-                deposits();
-                break;
-            case "P", "p":
-                payments();
-                break;
-            case "R", "r":
-                reports();
-                break;
-            case "H", "h":
-                homeScreen();
-                break;
+            System.out.println("\n Welcome to the Ledger");
+            System.out.println("-------------------------\n");
+            System.out.println("  [A] All");
+            System.out.println("  [D] Deposits");
+            System.out.println("  [P] Payments");
+            System.out.println("  [R] Reports");
+            System.out.println("  [H] Home \n");
+            System.out.print("Enter Choice: ");
+
+            String choice = scanner.nextLine();
+
+            switch (choice) {
+                case "A", "a":
+                    displayAllEntries();
+                    break;
+                case "D", "d":
+                    deposits();
+                    break;
+                case "P", "p":
+                    payments();
+                    break;
+                case "R", "r":
+                    reports();
+                    break;
+                case "H", "h":
+                    homeScreen();
+                    break;
+                default:
+                    System.out.println("This is not a valid answer, try again!");
+            }
         }
 
     }
 
     public static void reports()
     {
-        System.out.println("\n Custom Search: ");
-        System.out.println("-------------------\n");
-        System.out.println("  1. Month To Date");
-        System.out.println("  2. Previous Month");
-        System.out.println("  3. Year To Date");
-        System.out.println("  4. Previous Year");
-        System.out.println("  5. Search by Vendor");
-        System.out.println("  0. Back \n");
-        System.out.print("Enter Choice: ");
+        while (true) {
+            System.out.println("\n Custom Search: ");
+            System.out.println("-------------------\n");
+            System.out.println("  1. Month To Date");
+            System.out.println("  2. Previous Month");
+            System.out.println("  3. Year To Date");
+            System.out.println("  4. Previous Year");
+            System.out.println("  5. Search by Vendor");
+            System.out.println("  6. Custom Search");
+            System.out.println("  0. Back \n");
+            System.out.print("Enter Choice: ");
 
-        int choice = scanner.nextInt();
+            int choice = scanner.nextInt();
+            scanner.nextLine();
 
-        switch (choice)
-        {
-            case 1:
-                monthToDate();
-                break;
-            case 2:
-                previousMonth();
-                break;
-            case 3:
-                yearToDate();
-                break;
-            case 4:
-                previousYear();
-                break;
-            case 5:
-                searchByVendor();
-                break;
-            case 0:
-                backToLedger();
-                break;
+            switch (choice) {
+                case 1:
+                    monthToDate();
+                    break;
+                case 2:
+                    previousMonth();
+                    break;
+                case 3:
+                    yearToDate();
+                    break;
+                case 4:
+                    previousYear();
+                    break;
+                case 5:
+                    searchByVendor();
+                    break;
+                case 6:
+                    customSearch();
+                case 0:
+                    Ledger();
+                    break;
+                default:
+                    System.out.println("This is not a valid response, try again!");
+
+            }
         }
     }
 
@@ -127,14 +144,36 @@ public class CLIApp
             BufferedWriter bufWriter = new BufferedWriter(fileWriter);
             String input;
 
-            System.out.println("\nMake A Deposit ");
+            System.out.println("\nMake a deposit" +
+                    "\n (Type 'x' at anytime to cancel transaction!");
             System.out.println("---------------- \n");
+
             System.out.print("Enter a description: ");
             String description = scanner.nextLine();
+            if(description.equalsIgnoreCase("x"))
+            {
+                System.out.println("Transaction Cancelled Successfully!");
+                System.out.println("...............");
+                homeScreen();
+            }
+
             System.out.print("Enter Vendor: ");
             String vendor = scanner.nextLine();
+            if(vendor.equalsIgnoreCase("x"))
+            {
+                System.out.println("Transaction Cancelled Successfully!");
+                System.out.println("...............");
+                homeScreen();
+            }
+
             System.out.print("Enter Amount: ");
             double amount = scanner.nextDouble();
+            if(Double.toString(amount).equalsIgnoreCase("x"))
+            {
+                System.out.println("Transaction Cancelled Successfully!");
+                System.out.println("...............");
+                homeScreen();
+            }
 
             System.out.println("\n --------------- \n");
             System.out.println("Payment added successfully!");
@@ -216,7 +255,8 @@ public class CLIApp
             BufferedReader bufReader = new BufferedReader(fileReader);
             String readerInput;
 
-            if (inventory.isEmpty()) {
+            if (inventory.isEmpty())
+            {
                 while ((readerInput = bufReader.readLine()) != null) {
                     String[] barIndex = readerInput.split(Pattern.quote("|"));
                     String date = barIndex[0];
@@ -362,10 +402,58 @@ public class CLIApp
 
     }
 
+    public static void customSearch()
+    {
+        System.out.println("Start Date (yyyy-mm-dd): ");
+        String startDate = scanner.nextLine();
+        System.out.println("End Date (yyyy-mm-dd): ");
+        String endDate = scanner.nextLine();
+        System.out.println("Description: ");
+        String description = scanner.nextLine();
+        System.out.println("Vendor: ");
+        String vendor = scanner.nextLine();
+        System.out.println("Amount: ");
+        double amount = scanner.nextDouble();
+
+        for(Log i : inventory)
+        {
+            LocalDate time = LocalDate.parse(i.getDate());
+            if(time == LocalDate.parse(startDate) && time == LocalDate.parse(endDate) && i.getDescription().equalsIgnoreCase(description) && i.getVendor().equalsIgnoreCase(vendor) && i.getAmount() == amount)
+            {
+                System.out.println("-----------------------------");
+                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
+                System.out.println("-----------------------------");
+            }
+            else if (startDate.isEmpty() && time == LocalDate.parse(endDate) && i.getDescription().equalsIgnoreCase(description) && i.getVendor().equalsIgnoreCase(vendor) && i.getAmount() == amount)
+            {
+                System.out.println("-----------------------------");
+                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
+                System.out.println("-----------------------------");
+            }
+            else if (startDate.isEmpty() && endDate.isEmpty() && description.isEmpty() && i.getVendor().equalsIgnoreCase(vendor) && i.getAmount() == amount)
+            {
+                System.out.println("-----------------------------");
+                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
+                System.out.println("-----------------------------");
+            }
+            else if (startDate.isEmpty() && endDate.isEmpty() && description.isEmpty() && vendor.isEmpty() && i.getAmount() == amount)
+            {
+                System.out.println("-----------------------------");
+                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
+                System.out.println("-----------------------------");
+            }
+            else if (startDate.isEmpty() && endDate.isEmpty() && description.isEmpty() && vendor.isEmpty() && amount == 0)
+            {
+                System.out.println("-----------------------------");
+                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
+                System.out.println("-----------------------------");
+            }
+        }
+
+    }
 
     public static void  backToReports()
     {
-        scanner.nextLine();
         System.out.println("Go back to Reports? ");
         System.out.print("Answer: ");
 
