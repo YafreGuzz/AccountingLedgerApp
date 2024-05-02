@@ -456,6 +456,7 @@ public class CLIApp
                 System.out.println("-----------------------------");
             }
         }
+        backToReports();
     }
 
         private static boolean matchesCriteria (Log log, Map < String, String > criteria)
