@@ -92,7 +92,8 @@ public class CLIApp
 
     public static void reports()
     {
-        while (true) {
+        while (true)
+        {
             System.out.println("\n Custom Search: ");
             System.out.println("-------------------\n");
             System.out.println("  1. Month To Date");
@@ -107,7 +108,8 @@ public class CLIApp
             int choice = scanner.nextInt();
             scanner.nextLine();
 
-            switch (choice) {
+            switch (choice)
+            {
                 case 1:
                     monthToDate();
                     break;
@@ -124,7 +126,7 @@ public class CLIApp
                     searchByVendor();
                     break;
                 case 6:
-//                    customSearch();
+                    customSearch();
                 case 0:
                     Ledger();
                     break;
@@ -156,14 +158,15 @@ public class CLIApp
             cancelTransaction(vendor);
 
             System.out.print("Enter Amount: ");
-            double amount = scanner.nextDouble();
-            String amount2 = Double.toString(amount);
-            cancelTransaction(amount2);
+            String amount = scanner.nextLine();
+            cancelTransaction(amount);
+
+            double amount2 = Double.parseDouble(amount);
 
             System.out.println("\n --------------- \n");
             System.out.println("Payment added successfully!");
 
-            inventory.add(new Log(null, null, description, vendor, amount));
+            inventory.add(new Log(null, null, description, vendor, amount2));
 
             LocalDateTime time = LocalDateTime.now();
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd|HH:mm:ss|");
@@ -205,9 +208,10 @@ public class CLIApp
             cancelTransaction(expireDate);
 
             System.out.print("Enter CVC(Three digit number): ");
-            int CVCInput = scanner.nextInt();
-            String CVC = Integer.toString(CVCInput);
-            cancelTransaction(CVC);
+            String CVCInput = scanner.nextLine();
+            cancelTransaction(CVCInput);
+
+            int CVC = Integer.parseInt(CVCInput);
 
             bufWriter.write(name + "|");
             bufWriter.write(creditCard + "|");
@@ -431,55 +435,62 @@ public class CLIApp
 
     }
 
-//    public static void customSearch()
-//    {
-//        System.out.println("Start Date (yyyy-mm-dd): ");
-//        String startDate = scanner.nextLine();
-//        System.out.println("End Date (yyyy-mm-dd): ");
-//        String endDate = scanner.nextLine();
-//        System.out.println("Description: ");
-//        String description = scanner.nextLine();
-//        System.out.println("Vendor: ");
-//        String vendor = scanner.nextLine();
-//        System.out.println("Amount: ");
-//        double amount = scanner.nextDouble();
-//
-//        for(Log i : inventory)
-//        {
-//            LocalDate time = LocalDate.parse(i.getDate());
-//            if(time == LocalDate.parse(startDate) && time == LocalDate.parse(endDate) && i.getDescription().equalsIgnoreCase(description) && i.getVendor().equalsIgnoreCase(vendor) && i.getAmount() == amount)
-//            {
-//                System.out.println("-----------------------------");
-//                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
-//                System.out.println("-----------------------------");
-//            }
-//            else if (startDate.isEmpty() && time == LocalDate.parse(endDate) && i.getDescription().equalsIgnoreCase(description) && i.getVendor().equalsIgnoreCase(vendor) && i.getAmount() == amount)
-//            {
-//                System.out.println("-----------------------------");
-//                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
-//                System.out.println("-----------------------------");
-//            }
-//            else if (startDate.isEmpty() && endDate.isEmpty() && description.isEmpty() && i.getVendor().equalsIgnoreCase(vendor) && i.getAmount() == amount)
-//            {
-//                System.out.println("-----------------------------");
-//                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
-//                System.out.println("-----------------------------");
-//            }
-//            else if (startDate.isEmpty() && endDate.isEmpty() && description.isEmpty() && vendor.isEmpty() && i.getAmount() == amount)
-//            {
-//                System.out.println("-----------------------------");
-//                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
-//                System.out.println("-----------------------------");
-//            }
-//            else if (startDate.isEmpty() && endDate.isEmpty() && description.isEmpty() && vendor.isEmpty() && amount == 0)
-//            {
-//                System.out.println("-----------------------------");
-//                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
-//                System.out.println("-----------------------------");
-//            }
-//        }
-//
-//    }
+    public static void customSearch() {
+        Map<String, String> searchCriteria = new HashMap<>();
+
+        System.out.println("Start Date (yyyy-mm-dd): ");
+        searchCriteria.put("startDate", scanner.nextLine());
+        System.out.println("End Date (yyyy-mm-dd): ");
+        searchCriteria.put("endDate", scanner.nextLine());
+        System.out.println("Description: ");
+        searchCriteria.put("description", scanner.nextLine());
+        System.out.println("Vendor: ");
+        searchCriteria.put("vendor", scanner.nextLine());
+        System.out.println("Amount: ");
+        searchCriteria.put("amount", scanner.nextLine());
+
+        for (Log i : inventory) {
+            if (matchesCriteria(i, searchCriteria)) {
+                System.out.println("-----------------------------");
+                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
+                System.out.println("-----------------------------");
+            }
+        }
+    }
+
+        private static boolean matchesCriteria (Log log, Map < String, String > criteria)
+        {
+            for (Map.Entry<String, String> entry : criteria.entrySet())
+            {
+                String key = entry.getKey();
+                String value = entry.getValue();
+
+                switch (key)
+                {
+                    case "startDate", "endDate":
+                        if (!value.isEmpty() && !log.getDate().equals(value)) {
+                            return false;
+                        }
+                        break;
+                    case "description":
+                        if (!value.isEmpty() && !log.getDescription().equalsIgnoreCase(value)) {
+                            return false;
+                        }
+                        break;
+                    case "vendor":
+                        if (!value.isEmpty() && !log.getVendor().equalsIgnoreCase(value)) {
+                            return false;
+                        }
+                        break;
+                    case "amount":
+                        if (!value.isEmpty() && log.getAmount() != Double.parseDouble(value)) {
+                            return false;
+                        }
+                        break;
+                }
+            }
+            return true;
+        }
 
     public static void  backToReports()
     {
@@ -492,8 +503,12 @@ public class CLIApp
         {
             reports();
         }
-        else
+        else if(choice.equalsIgnoreCase("no")) {
             System.exit(0);
+        }
+        else
+            System.out.println("Enter valid response: (ex: yes/no)");
+            backToReports();
     }
 
 
@@ -510,6 +525,9 @@ public class CLIApp
         else if (choice.equalsIgnoreCase("no")) {
             System.exit(0);
         }
+        else
+            System.out.println("Enter valid response: (ex: yes/no)");
+            backToHomeScreen();
     }
 
 
@@ -522,10 +540,13 @@ public class CLIApp
         {
             Ledger();
         }
-        else
+        else if(choice.equalsIgnoreCase("no"))
         {
             System.exit(0);
         }
+        else
+            System.out.println("Enter valid response: (ex: yes/no)");
+            backToLedger();
         scanner.nextLine();
     }
     public static void  cancelTransaction(String d)
