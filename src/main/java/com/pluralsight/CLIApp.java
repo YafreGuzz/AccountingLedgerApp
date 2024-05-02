@@ -124,7 +124,7 @@ public class CLIApp
                     searchByVendor();
                     break;
                 case 6:
-                    customSearch();
+//                    customSearch();
                 case 0:
                     Ledger();
                     break;
@@ -144,36 +144,21 @@ public class CLIApp
             BufferedWriter bufWriter = new BufferedWriter(fileWriter);
             String input;
 
-            System.out.println("\nMake a deposit" +
-                    "\n (Type 'x' at anytime to cancel transaction!");
+            System.out.println("\nMake a deposip\n (Type 'x' at anytime to cancel transaction!)");
             System.out.println("---------------- \n");
 
             System.out.print("Enter a description: ");
             String description = scanner.nextLine();
-            if(description.equalsIgnoreCase("x"))
-            {
-                System.out.println("Transaction Cancelled Successfully!");
-                System.out.println("...............");
-                homeScreen();
-            }
+            cancelTransaction(description);
 
             System.out.print("Enter Vendor: ");
             String vendor = scanner.nextLine();
-            if(vendor.equalsIgnoreCase("x"))
-            {
-                System.out.println("Transaction Cancelled Successfully!");
-                System.out.println("...............");
-                homeScreen();
-            }
+            cancelTransaction(vendor);
 
             System.out.print("Enter Amount: ");
             double amount = scanner.nextDouble();
-            if(Double.toString(amount).equalsIgnoreCase("x"))
-            {
-                System.out.println("Transaction Cancelled Successfully!");
-                System.out.println("...............");
-                homeScreen();
-            }
+            String amount2 = Double.toString(amount);
+            cancelTransaction(amount2);
 
             System.out.println("\n --------------- \n");
             System.out.println("Payment added successfully!");
@@ -205,18 +190,24 @@ public class CLIApp
             FileWriter fileWriter = new FileWriter("src/main/resources/debitInformation.csv", true);
             BufferedWriter bufWriter = new BufferedWriter(fileWriter);
 
-            System.out.println("Enter your Credit Card information: ");
+            System.out.println("\nEnter your Credit Card information: \n(Type 'x' at anytime to cancel transaction!");
             System.out.println("------------------------------------- \n");
             System.out.print("Enter the card holder name: ");
             String name = scanner.nextLine();
+            cancelTransaction(name);
+
             System.out.print("Credit Card Number(ex: 1234 5678 9876 5432): ");
             String creditCard = scanner.nextLine();
+            cancelTransaction(creditCard);
+
             System.out.print("Enter Expiration Date: ");
             String expireDate = scanner.nextLine();
+            cancelTransaction(expireDate);
+
             System.out.print("Enter CVC(Three digit number): ");
             int CVCInput = scanner.nextInt();
-
             String CVC = Integer.toString(CVCInput);
+            cancelTransaction(CVC);
 
             bufWriter.write(name + "|");
             bufWriter.write(creditCard + "|");
@@ -293,14 +284,21 @@ public class CLIApp
 
     public static void payments()
     {
-        for(Log i : inventory)
+        boolean foundNegative = false;
+
+        for (Log i : inventory)
         {
-            if(i.getAmount() < 0 )
+            if (i.getAmount() < 0)
             {
                 System.out.println("-----------------------------");
                 System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
                 System.out.println("-----------------------------");
+                foundNegative = true;
             }
+        }
+        if(!foundNegative)
+        {
+            System.out.println("No payments with negative amounts found.");
         }
         backToLedger();
     }
@@ -308,6 +306,7 @@ public class CLIApp
 
     public static void monthToDate()
     {
+        boolean foundMonth = false;
         LocalDate date = LocalDate.now();
 
         for(Log i : inventory)
@@ -318,7 +317,12 @@ public class CLIApp
                 System.out.println("-----------------------------");
                 System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
                 System.out.println("-----------------------------");
+                foundMonth = true;
             }
+        }
+        if (!foundMonth)
+        {
+            System.out.println("There's nothing from this month!");
         }
         backToReports();
     }
@@ -326,6 +330,8 @@ public class CLIApp
 
     public static void previousMonth()
     {
+        boolean foundPreviousMonth = false;
+
         LocalDate date = LocalDate.now();
         LocalDate previousMonth = date.minusMonths(1);
 
@@ -340,7 +346,12 @@ public class CLIApp
                 System.out.println("-----------------------------");
                 System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
                 System.out.println("-----------------------------");
+                foundPreviousMonth = true;
             }
+        }
+        if (!foundPreviousMonth)
+        {
+            System.out.println("There's nothing from the previous month!");
         }
         backToReports();
     }
@@ -348,6 +359,7 @@ public class CLIApp
 
     public static void yearToDate()
     {
+        boolean foundYear = false;
         LocalDate date = LocalDate.now();
 
         for(Log i : inventory)
@@ -358,7 +370,12 @@ public class CLIApp
                 System.out.println("-----------------------------");
                 System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
                 System.out.println("-----------------------------");
+                foundYear = true;
             }
+        }
+        if(!foundYear)
+        {
+            System.out.println("There's nothing from this year!");
         }
         backToReports();
     }
@@ -366,6 +383,7 @@ public class CLIApp
 
     public static void previousYear()
     {
+        boolean foundPreviosYear = false;
         LocalDate date = LocalDate.now();
 
         for(Log i : inventory)
@@ -377,7 +395,12 @@ public class CLIApp
                 System.out.println("-----------------------------");
                 System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
                 System.out.println("-----------------------------");
+                foundPreviosYear = true;
             }
+        }
+        if(!foundPreviosYear)
+        {
+            System.out.println("There's nothing from the previous years!");
         }
         backToReports();
     }
@@ -385,6 +408,7 @@ public class CLIApp
 
     public static void searchByVendor()
     {
+        boolean foundVendor = false;
         System.out.println("Who's the Vendor? ");
         System.out.print("Answer: ");
         String name = scanner.nextLine();
@@ -396,61 +420,66 @@ public class CLIApp
                 System.out.println("-----------------------------");
                 System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
                 System.out.println("-----------------------------");
+                foundVendor = true;
             }
+        }
+        if (!foundVendor)
+        {
+            System.out.println("There is no such vendor!");
         }
         backToReports();
 
     }
 
-    public static void customSearch()
-    {
-        System.out.println("Start Date (yyyy-mm-dd): ");
-        String startDate = scanner.nextLine();
-        System.out.println("End Date (yyyy-mm-dd): ");
-        String endDate = scanner.nextLine();
-        System.out.println("Description: ");
-        String description = scanner.nextLine();
-        System.out.println("Vendor: ");
-        String vendor = scanner.nextLine();
-        System.out.println("Amount: ");
-        double amount = scanner.nextDouble();
-
-        for(Log i : inventory)
-        {
-            LocalDate time = LocalDate.parse(i.getDate());
-            if(time == LocalDate.parse(startDate) && time == LocalDate.parse(endDate) && i.getDescription().equalsIgnoreCase(description) && i.getVendor().equalsIgnoreCase(vendor) && i.getAmount() == amount)
-            {
-                System.out.println("-----------------------------");
-                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
-                System.out.println("-----------------------------");
-            }
-            else if (startDate.isEmpty() && time == LocalDate.parse(endDate) && i.getDescription().equalsIgnoreCase(description) && i.getVendor().equalsIgnoreCase(vendor) && i.getAmount() == amount)
-            {
-                System.out.println("-----------------------------");
-                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
-                System.out.println("-----------------------------");
-            }
-            else if (startDate.isEmpty() && endDate.isEmpty() && description.isEmpty() && i.getVendor().equalsIgnoreCase(vendor) && i.getAmount() == amount)
-            {
-                System.out.println("-----------------------------");
-                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
-                System.out.println("-----------------------------");
-            }
-            else if (startDate.isEmpty() && endDate.isEmpty() && description.isEmpty() && vendor.isEmpty() && i.getAmount() == amount)
-            {
-                System.out.println("-----------------------------");
-                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
-                System.out.println("-----------------------------");
-            }
-            else if (startDate.isEmpty() && endDate.isEmpty() && description.isEmpty() && vendor.isEmpty() && amount == 0)
-            {
-                System.out.println("-----------------------------");
-                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
-                System.out.println("-----------------------------");
-            }
-        }
-
-    }
+//    public static void customSearch()
+//    {
+//        System.out.println("Start Date (yyyy-mm-dd): ");
+//        String startDate = scanner.nextLine();
+//        System.out.println("End Date (yyyy-mm-dd): ");
+//        String endDate = scanner.nextLine();
+//        System.out.println("Description: ");
+//        String description = scanner.nextLine();
+//        System.out.println("Vendor: ");
+//        String vendor = scanner.nextLine();
+//        System.out.println("Amount: ");
+//        double amount = scanner.nextDouble();
+//
+//        for(Log i : inventory)
+//        {
+//            LocalDate time = LocalDate.parse(i.getDate());
+//            if(time == LocalDate.parse(startDate) && time == LocalDate.parse(endDate) && i.getDescription().equalsIgnoreCase(description) && i.getVendor().equalsIgnoreCase(vendor) && i.getAmount() == amount)
+//            {
+//                System.out.println("-----------------------------");
+//                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
+//                System.out.println("-----------------------------");
+//            }
+//            else if (startDate.isEmpty() && time == LocalDate.parse(endDate) && i.getDescription().equalsIgnoreCase(description) && i.getVendor().equalsIgnoreCase(vendor) && i.getAmount() == amount)
+//            {
+//                System.out.println("-----------------------------");
+//                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
+//                System.out.println("-----------------------------");
+//            }
+//            else if (startDate.isEmpty() && endDate.isEmpty() && description.isEmpty() && i.getVendor().equalsIgnoreCase(vendor) && i.getAmount() == amount)
+//            {
+//                System.out.println("-----------------------------");
+//                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
+//                System.out.println("-----------------------------");
+//            }
+//            else if (startDate.isEmpty() && endDate.isEmpty() && description.isEmpty() && vendor.isEmpty() && i.getAmount() == amount)
+//            {
+//                System.out.println("-----------------------------");
+//                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
+//                System.out.println("-----------------------------");
+//            }
+//            else if (startDate.isEmpty() && endDate.isEmpty() && description.isEmpty() && vendor.isEmpty() && amount == 0)
+//            {
+//                System.out.println("-----------------------------");
+//                System.out.printf("Description: %s Vendor: %s Amount: $%.2f \n", i.getDescription(), i.getVendor(), i.getAmount());
+//                System.out.println("-----------------------------");
+//            }
+//        }
+//
+//    }
 
     public static void  backToReports()
     {
@@ -493,9 +522,19 @@ public class CLIApp
         {
             Ledger();
         }
-        else {
+        else
+        {
             System.exit(0);
         }
         scanner.nextLine();
+    }
+    public static void  cancelTransaction(String d)
+    {
+        if(d.equalsIgnoreCase("x"))
+        {
+            System.out.println("Transaction Cancelled Successfully!");
+            System.out.println("...............");
+            homeScreen();
+        }
     }
 }
